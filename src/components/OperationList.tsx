@@ -7,6 +7,7 @@ import { ComponentType, ReactNode } from 'react'
 import { neoLayoutAtom } from 'store/pref'
 
 import { NeoOperationCard, OperationCard } from './OperationCard'
+import { OperationVirtualList } from './OperationVirtualList'
 import { withSuspensable } from './Suspensable'
 
 export const OperationList: ComponentType<UseOperationsParams> =
@@ -23,6 +24,7 @@ export const OperationList: ComponentType<UseOperationsParams> =
       // make TS happy: we got Suspense out there
       if (!operations) throw new Error('unreachable')
 
+      console.log('neoLayout', neoLayout)
       const items: ReactNode = neoLayout ? (
         <div
           className="grid gap-4"
@@ -35,9 +37,7 @@ export const OperationList: ComponentType<UseOperationsParams> =
           ))}
         </div>
       ) : (
-        operations.map((operation) => (
-          <OperationCard operation={operation} key={operation.id} />
-        ))
+        <OperationVirtualList operations={[...operations]} />
       )
 
       return (
